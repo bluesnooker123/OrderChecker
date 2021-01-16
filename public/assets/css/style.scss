@@ -1,0 +1,122 @@
+#div_title{
+    background-color: #eeeeee;
+    height: 50px;
+}
+#title_img{
+    // content:url("../image/Program_icon.png");
+    width: 50px;
+    height: 50px;
+    margin-left:1%;
+    padding: 5px;
+}
+#title_text{
+    font-size: 1.5em;
+}
+.title-1{
+    // display: inline;
+    vertical-align: middle;
+}
+.div_bar{
+    height: 5px;
+    background-color: #dddddd;
+}
+// #div_con{
+//     //border: solid 2px #00dddd;
+// }
+#btn_reset{
+    background-image: url("../image/reset_noborder.png");
+    background-size: 100% 100%;
+    width: 100px;
+    height: 33px;
+    border: solid 2px red;
+}
+// #btn_order{
+//     background-image: url("../image/order_noborder.png");
+//     background-size: 100% 100%;
+//     width: 120px;
+//     height: 33px;
+//     border: solid 2px green;
+//     margin-left: -6%;
+// }
+#btn_setting{
+    background-image: url("../image/setting.png");
+    background-size: 100% 100%;
+    width: 35px;
+    height: 35px;
+    border: solid 2px gray;
+}
+.btn-default:hover{
+    background-color: #cccccc !important;
+}
+#div_progress{
+    background-image: url("../image/progressbar.png");
+    background-size: 100% 100%;
+    width: 100%;
+    height: 53px;
+}
+#div_scan_order_status{
+    width: 80px;
+    text-align: center;
+}
+#scan_order_img{
+    width: 30px;
+    height: 30px;
+}
+#scan_order_text{
+    color: #757575;
+}
+#div_scan_item_status{
+    width: 80px;
+    text-align: center;
+}
+#scan_item_img{
+    width: 30px;
+    height: 30px;
+}
+#scan_item_text{
+    color: #757575;
+}
+.progress-text{
+    font-size: 1em;
+    display: block;
+}
+#btn_scan{
+    width: 115px;
+    height: 35px;
+    border: solid 2px gray;
+    line-height: 1em;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-right: 5px;
+    margin-top: 1.5px;
+}
+#div_table{
+    height: 500px;
+    overflow-y: auto;
+}
+.header{
+    position: sticky; 
+    top:0;
+}
+.btn-edit{
+    background-image: url("../image/edit_quantity.png");
+    background-size: 100% 100%;
+    width: 10px;
+    height: 10px;
+}
+.fa-edit:hover{
+    cursor: pointer;
+}
+#quantity_ordered_num{
+    margin-right:55px;
+}
+#div_modal_body{
+    padding-right: 89px;
+}
+
+// @media (max-width: 1024px) {
+//     /* CSS that should be displayed if width is equal to or less than 1024px goes here */
+//     #quantity_ordered_num{
+//         margin-right:40px;
+//     }
+// }

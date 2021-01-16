@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/image/Program_icon.ico"/>
+    <title>Order Checker</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+
+  <body>
+      <div id="div_title">
+        <div>
+          <image id="title_img" class="title-1" src="assets/image/Program_icon.png" alt="title image"></image>
+          <span id="title_text" class="title-1">Order Checker</span>
+        </div>
+      </div>
+      <div class="div_bar">
+      </div>
+      <div id="div_con" class="container mt-2">
+        <div class="d-flex justify-content-between">
+          <button type="submit" id="btn_reset" class="btn btn-default"></button>
+          <!-- <button type="submit" id="btn_order" class="btn btn-default"></button>          -->
+          <button type="submit" id="btn_setting" class="btn btn-default"></button>
+        </div>
+        <div id="div_progress" class="d-flex justify-content-around">
+          <div id="div_scan_order_status">
+            <image id="scan_order_img" src="assets/image/status_blank.png" alt="blank"></image>
+            <span id="scan_order_text" class="progress-text">Scan order</span>
+          </div>
+          <div id="div_scan_item_status">
+            <image id="scan_item_img" src="assets/image/status_checked.png" alt="blank"></image>
+            <span id="scan_item_text" class="progress-text">Scan item</span>
+          </div>
+        </div>
+        <div class="d-flex">
+          <button type="submit" id="btn_scan" class="btn btn-default">Scan order</button>
+          <input type="text" id="input_scan" name="input_scan" class="form-control" placeholder="Input here" required="required" />
+        </div>
+        <div id="div_table">
+        </div>
+      </div>
+
+      <div class="modal fade" id="quantity_modal" tabindex="-1" role="dialog" aria-labelledby="title_quantity" aria-hidden="true">
+        <div id="modal_main" class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="title_quantity">Quantity</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div id="div_modal_body" class="modal-body">
+            </div>
+            <div id="div_modal_foot" class="modal-footer">
+              <button id="btn_quantity_save" class="btn btn-primary">Save</button>
+              <button id="btn_quantity_cancel" class="btn btn-outline-success" data-dismiss="modal" >Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+    
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- <script src="assets/js/xmlToJSON.min.js"></script> -->
+    <script src="assets/js/main.js"></script>
+
+  </body>
+</html>
