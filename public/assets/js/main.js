@@ -118,6 +118,8 @@ function show_order_data(order_id){
 
         $('#btn_scan').text("Scan item");
         $('#input_scan').val("");
+        $('#scan_order_img').attr('src','assets/image/status_checked.png');
+        $('#scan_item_img').attr('src','assets/image/status_checking.png');
     }); 
 
 }
