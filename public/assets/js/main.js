@@ -18,6 +18,13 @@ jQuery( document ).ready(function( $ ) {
                 Swal.fire('Please input order id!');
                 document.getElementById("audio_wrong").play();
                 //$('#audio_wrong')[0].play();
+
+                var curTime = new Date();
+                var LogData = {logdata: `Empty Order Input => Please input order id! ::: ${curTime}`};
+                $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+                    console.log("save log result: ",result);
+                });
+        
             } else
                 show_order_data(order_id);
         }    
@@ -26,6 +33,12 @@ jQuery( document ).ready(function( $ ) {
             if(find_item == ""){
                 document.getElementById('audio_wrong').play();
                 Swal.fire('Please input SKU or UPC!');
+
+                var curTime = new Date();
+                var LogData = {logdata: `Empty Item Input => Please input SKU or UPC! ::: ${curTime}`};
+                $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+                    console.log("save log result: ",result);
+                });
             }
             else
                 show_item_data(find_item);
@@ -54,15 +67,27 @@ jQuery( document ).ready(function( $ ) {
     });
     $('#btn_quantity_save').click(function(){
         if(Number($('#input_quantity_scanned').val()) < 0){
-            Swal.fire("Scanned quantity cannot less than zero");
+            Swal.fire("Scanned quantity cannot less than zero!");
             document.getElementById("audio_wrong").play();
             $('#input_quantity_scanned').val(quantity_scanned_before);
+
+            var curTime = new Date();
+            var LogData = {logdata: `Input quantity error => Scanned quantity cannot less than zero! ::: ${curTime}`};
+            $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+                console.log("save log result: ",result);
+            });
             return;
         }
         if(Number($('#input_quantity_scanned').val()) > Number($('#input_quantity_scanned').attr('max'))){
             Swal.fire("Scanned quantity cannot larger than ordered quantity!");
             document.getElementById("audio_wrong").play();
             $('#input_quantity_scanned').val(quantity_scanned_before);
+
+            var curTime = new Date();
+            var LogData = {logdata: `Input quantity error => Scanned quantity cannot larger than ordered quantity! ::: ${curTime}`};
+            $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+                console.log("save log result: ",result);
+            });
             return;
         }
 
@@ -77,8 +102,15 @@ jQuery( document ).ready(function( $ ) {
         $('#quantity_modal').modal('hide');
     
         document.getElementById("audio_right").play();
+
+        var curTime = new Date();
+        var LogData = {logdata: `Success => Scan item successed by edit dialog - SKU: ${handle_selected_row.cells[1].innerHTML} UPC: ${handle_selected_row.cells[2].innerHTML} ::: ${curTime}`};
+        $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+            console.log("save log result: ",result);   
+        });
+        
         if(check_scan_item_completed()){
-            document.getElementById("audio_complete").play();
+            document.getElementById("audio_complete").play();  
             initialize_for_new_order();
         }
 
@@ -96,17 +128,25 @@ jQuery( document ).ready(function( $ ) {
 function show_order_data(order_id){
     let filterText = ['#','SKU','UPC','Name','Qty'];
     let tableData = document.getElementById("div_table"); 
-    get_Info_of_orderID_from_bigcommerce(order_id,function(res){   // Get information of order ID from bigcommerce using API
+    // get_Info_of_orderID_from_bigcommerce(order_id,function(res){   // Get information of order ID from bigcommerce using API
+    //     let con_div = document.getElementById("div_con"); 
+    //     let currentDiv = document.getElementById("div_table"); 
+    //     let newDiv = document.createElement("div");
+    //     newDiv.id="div_Order_ID";
+    //     newDiv.innerHTML = "Order ID: " + order_id;
+    //     // newDiv.innerHTML += "<br>Created at: " + res['date_created'] + "<br>Modified at: " + res['date_modified'];
+    //     newDiv.className = "font-weight-bold mt-3";
+    //     con_div.insertBefore(newDiv, currentDiv);
+    // }); 
+    get_data_from_bigcommerce(order_id,function(res){   // Get data from Bigcommerce using API by order id
+
         let con_div = document.getElementById("div_con"); 
-        let currentDiv = document.getElementById("div_table"); 
         let newDiv = document.createElement("div");
         newDiv.id="div_Order_ID";
         newDiv.innerHTML = "Order ID: " + order_id;
-        // newDiv.innerHTML += "<br>Created at: " + res['date_created'] + "<br>Modified at: " + res['date_modified'];
         newDiv.className = "font-weight-bold mt-3";
-        con_div.insertBefore(newDiv, currentDiv);
-    }); 
-    get_data_from_bigcommerce(order_id,function(res){   // Get data from Bigcommerce using API by order id
+        con_div.insertBefore(newDiv, tableData);
+
         data = res;
         //console.log("return data: ", data);
 
@@ -153,30 +193,30 @@ function show_order_data(order_id){
     }); 
 
 }
-function get_Info_of_orderID_from_bigcommerce(order_id, callback)        //Get information of order ID from bigcommerce using API
-{
-    let rtn_data = "";       
-    var settings = {
-        "url": "https://cors-anywhere.herokuapp.com/https://api.bigcommerce.com/stores/shxhfy2z6/v2/orders/" + order_id,
-        "method": "GET",
-        "timeout": 0,
-        "headers": {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "X-Auth-Token": "1a0lzau4857rh1vymhwi6cxnqw1x6dz"
-        },
-      };
+// function get_Info_of_orderID_from_bigcommerce(order_id, callback)        //Get information of order ID from bigcommerce using API
+// {
+//     let rtn_data = "";       
+//     var settings = {
+//         "url": "https://cors-anywhere.herokuapp.com/https://api.bigcommerce.com/stores/shxhfy2z6/v2/orders/" + order_id,
+//         "method": "GET",
+//         "timeout": 0,
+//         "headers": {
+//           "Accept": "application/json",
+//           "Content-Type": "application/json",
+//           "X-Auth-Token": "1a0lzau4857rh1vymhwi6cxnqw1x6dz"
+//         },
+//       };
       
-      $.ajax(settings).done(function (response) {
-        //console.log(response);
-        rtn_data = {'date_created': response['date_created'], 'date_modified': response['date_modified']};
-        if (typeof callback == "function") 
-            callback(rtn_data); 
+//     $.ajax(settings).done(function (response) {
+//         //console.log(response);
+//         rtn_data = {'date_created': response['date_created'], 'date_modified': response['date_modified']};
+//         if (typeof callback == "function") 
+//             callback(rtn_data); 
     
-      }).fail(function(xhr, status, error) {
-          console.log("Can not get data from Bigcommerce!");
-    });
-}
+//     }).fail(function(xhr, status, error) {
+//         console.log("Can not get data from Bigcommerce!");
+//     });
+// }
 
 function get_data_from_bigcommerce(order_id, callback)        //get data from bigcommerce using API by order_id
 {       
@@ -201,15 +241,26 @@ function get_data_from_bigcommerce(order_id, callback)        //get data from bi
         }
         if (typeof callback == "function") {
             document.getElementById("audio_right").play();
+
+            var curTime = new Date();
+            var LogData = {logdata: `Loading completed => Loading items for Order ID: ${order_id} completed. ::: ${curTime}`};
+            $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+                console.log("save log result: ",result);
+            });    
             callback(rtn_data); 
         }
     
       }).fail(function(xhr, status, error) {
             document.getElementById("audio_wrong").play();
-//            console.log("Can not get data from Bigcommerce!");
             Swal.fire("Can not get data from Bigcommerce!","Check your network connection or<br> input correct order ID!");
             $('#input_scan').val('');
-    });
+
+            var curTime = new Date();
+            var LogData = {logdata: `Loading Failed => Loading items for Order ID: ${order_id} failed. ::: ${curTime}`};
+            $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+                console.log("save log result: ",result);
+            });    
+        });
 }
 
 function show_item_data(find_item){
@@ -234,6 +285,13 @@ function initialize_for_new_order(){
         $('#div_table').children().remove();
         flag_initialized = true;
         $('#input_scan').focus();
+
+        var curTime = new Date();
+        var LogData = {logdata: `Scan item completed => Scan of order ID:${temp_arr[1]} has been completed. ::: ${curTime}`};
+        $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+            console.log("save log result: ",result);
+        });
+
     });
 }
 function Search_item(searchValue) {
@@ -262,9 +320,23 @@ function Search_item(searchValue) {
                         searchTable.rows.item(rowIndex).style.backgroundColor = 'lightskyblue';
                     }
                     document.getElementById("audio_right").play();
+
+                    var curTime = new Date();
+                    var LogData = {logdata: `Success => Scan item successed - ${searchValue} ::: ${curTime}`};
+                    $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+                        console.log("save log result: ",result);
+                    });
+
                 } else{
                     document.getElementById("audio_wrong").play();
-                    Swal.fire(searchValue + " is completed already!");            
+                    Swal.fire(searchValue + " is completed already!"); 
+                    
+                    var curTime = new Date();
+                    var LogData = {logdata: `Too many => ${searchValue} is completed already ::: ${curTime}`};
+                    $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+                        console.log("save log result: ",result);
+                    });
+
                 }
                 searchTable.rows[rowIndex].cells[4].innerHTML = temp_arr[0] + '/' + temp_arr[1];   
                 break;
@@ -299,6 +371,13 @@ function Search_item(searchValue) {
     if(!flag_found_item){
         document.getElementById("audio_wrong").play();
         Swal.fire("Can not find item - " + searchValue);
+
+        var curTime = new Date();
+        var LogData = {logdata: `No match => Can not find item - ${searchValue} ::: ${curTime}`};
+        $.post(`${window.location.href}SaveToLog`, LogData, function(result){
+            console.log("save log result: ",result);
+        });
+
     }
 
 }
