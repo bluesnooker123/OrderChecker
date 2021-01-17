@@ -17,7 +17,7 @@ app.get("/", function (req, res) {
 
 app.post('/SaveToLog', function(req, res){
   // console.log(req.body);
-  fs.appendFile('Order Checker Log.txt', req.body.logdata + '\r\n', function (err) {
+  fs.appendFile('public/OrderCheckerLog.txt', req.body.logdata + '\r\n', function (err) {
     if (err) 
       return console.log(err);
     response = { status : "successed" };
