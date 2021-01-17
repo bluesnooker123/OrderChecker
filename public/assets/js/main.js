@@ -249,9 +249,8 @@ function Search_item(searchValue) {
         }
         //Process data rows. (rowIndex >= 1)
         for (var colIndex = 0; colIndex < searchColCount; colIndex++) {
-//            if(searchTable.rows.item(rowIndex).cells.item(colIndex).textContent == searchValue){
-              if(searchTable.rows.item(rowIndex).cells.item(colIndex).textContent.toLowerCase() == searchValue.toLowerCase()){
-                    flag_found_item = true;
+            if(searchTable.rows.item(rowIndex).cells.item(colIndex).textContent.toLowerCase() == searchValue.toLowerCase()){
+                flag_found_item = true;
                 let temp_arr = searchTable.rows[rowIndex].cells[4].innerHTML.split('/');
                 if(Number(temp_arr[1]) < Number(temp_arr[0])){
                     temp_arr[1] =  (Number(temp_arr[1]) + 1).toString();
@@ -266,8 +265,8 @@ function Search_item(searchValue) {
                     document.getElementById("audio_wrong").play();
                     Swal.fire("This item is completed already!");            
                 }
-
                 searchTable.rows[rowIndex].cells[4].innerHTML = temp_arr[0] + '/' + temp_arr[1];   
+                break;
             }
             //rowData += searchTable.rows.item(rowIndex).cells.item(colIndex).textContent;
         }
