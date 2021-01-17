@@ -1,11 +1,20 @@
 var data = [];
 var quantity_scanned_before = 0;
 var handle_selected_row = null;
+var flag_initialized = false;
 jQuery( document ).ready(function( $ ) {
+    $('#input_scan').focus();
+    $("#input_scan").keyup(function(event) {
+        if (event.keyCode === 13) {
+            $("#btn_scan").click();
+        }
+    });
     $('#btn_scan').click(function(){
         if($('#btn_scan').text() == "Scan order"){
             let order_id = $('#input_scan').val();
-            if(order_id == "")
+            if((order_id == "") && flag_initialized)
+                flag_initialized = false;
+            else if(order_id == "")
                 Swal.fire('Please input order id!');
             else
                 show_order_data(order_id);
@@ -60,6 +69,17 @@ jQuery( document ).ready(function( $ ) {
         else
             handle_selected_row.style.backgroundColor = 'lightskyblue';
         $('#quantity_modal').modal('hide');
+    
+        if(check_scan_item_completed())
+            initialize_for_new_order();
+
+    });
+    $('#btn_reset').click(function(){
+        if($('#input_scan').attr('placeholder') == "Scan item"){
+            reset_items();
+            $('#input_scan').val('');
+        }
+        $('#input_scan').focus();
     });
     
 });
@@ -67,11 +87,11 @@ jQuery( document ).ready(function( $ ) {
 function show_order_data(order_id){
     let filterText = ['#','SKU','UPC','Name','Qty'];
     let tableData = document.getElementById("div_table"); 
-//    let data = [["machineA",15],["machineB",54],["machineC",26]];
     get_Info_of_orderID_from_bigcommerce(order_id,function(res){   // Get information of order ID from bigcommerce using API
         let con_div = document.getElementById("div_con"); 
         let currentDiv = document.getElementById("div_table"); 
         let newDiv = document.createElement("div");
+        newDiv.id="div_Order_ID";
         newDiv.innerHTML = "Order ID: " + order_id;
         // newDiv.innerHTML += "<br>Created at: " + res['date_created'] + "<br>Modified at: " + res['date_modified'];
         newDiv.className = "font-weight-bold mt-3";
@@ -118,6 +138,7 @@ function show_order_data(order_id){
 
         $('#btn_scan').text("Scan item");
         $('#input_scan').val("");
+        $('#input_scan').attr('placeholder','Scan item');
         $('#scan_order_img').attr('src','assets/image/status_checked.png');
         $('#scan_item_img').attr('src','assets/image/status_checking.png');
     }); 
@@ -181,7 +202,22 @@ function show_item_data(find_item){
     // let obj = data.find(item => item[0] === find_item)
     // console.log("find result: ", obj);
     Search_item(find_item);
-
+    if(check_scan_item_completed())
+        initialize_for_new_order();
+}
+function initialize_for_new_order(){
+    let temp_arr = $('#div_Order_ID').text().split(':');
+    Swal.fire('',"Scan of order ID:"+temp_arr[1]+" has been completed.").then((value)=>{
+        $('#btn_scan').text("Scan order");
+        $('#input_scan').val("");
+        $('#input_scan').attr('placeholder','Scan order');
+        $('#scan_order_img').attr('src','assets/image/status_checking.png');
+        $('#scan_item_img').attr('src','assets/image/status_blank.png');    
+        $('#div_Order_ID').remove();
+        $('#div_table').children().remove();
+        flag_initialized = true;
+        $('#input_scan').focus();
+    });
 }
 function Search_item(searchValue) {
     var searchTable = document.getElementById('myTable'); 
@@ -238,8 +274,38 @@ function Search_item(searchValue) {
     }
 }
 
+function check_scan_item_completed(){
+    var searchTable = document.getElementById('myTable'); 
+    var scanned_item_count = 0;
+    //Loop through table rows
+    for (var rowIndex = 0; rowIndex < searchTable.rows.length; rowIndex++) {
+        //Get column count from header row
+        if (rowIndex == 0) {
+           continue; //do not execute further code for header row.
+        }
+        let temp_arr = searchTable.rows[rowIndex].cells[4].innerHTML.split('/');
+        if(Number(temp_arr[1]) == Number(temp_arr[0])){
+            scanned_item_count++;
+        }
+    }
+    if(scanned_item_count == (searchTable.rows.length-1))
+        return true;
+    return false;
+}
 
-
+function reset_items(){
+    var searchTable = document.getElementById('myTable'); 
+    //Loop through table rows
+    for (var rowIndex = 0; rowIndex < searchTable.rows.length; rowIndex++) {
+        //Get column count from header row
+        if (rowIndex == 0) {
+           continue; //do not execute further code for header row.
+        }
+        let temp_arr = searchTable.rows[rowIndex].cells[4].innerHTML.split('/');
+        searchTable.rows[rowIndex].cells[4].innerHTML = temp_arr[0] + '/0';   
+        searchTable.rows[rowIndex].style.backgroundColor = '';
+    }
+}
 
 
 /* Centering the modal vertically */ 
