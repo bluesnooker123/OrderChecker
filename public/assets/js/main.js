@@ -14,15 +14,19 @@ jQuery( document ).ready(function( $ ) {
             let order_id = $('#input_scan').val();
             if((order_id == "") && flag_initialized)
                 flag_initialized = false;
-            else if(order_id == "")
+            else if(order_id == ""){
                 Swal.fire('Please input order id!');
-            else
+                document.getElementById("audio_wrong").play();
+                //$('#audio_wrong')[0].play();
+            } else
                 show_order_data(order_id);
         }    
         else if($('#btn_scan').text() == "Scan item"){
             let find_item = $('#input_scan').val();
-            if(find_item == "")
+            if(find_item == ""){
+                document.getElementById('audio_wrong').play();
                 Swal.fire('Please input SKU or UPC!');
+            }
             else
                 show_item_data(find_item);
         }
@@ -51,11 +55,13 @@ jQuery( document ).ready(function( $ ) {
     $('#btn_quantity_save').click(function(){
         if(Number($('#input_quantity_scanned').val()) < 0){
             Swal.fire("Scanned quantity cannot less than zero");
+            document.getElementById("audio_wrong").play();
             $('#input_quantity_scanned').val(quantity_scanned_before);
             return;
         }
         if(Number($('#input_quantity_scanned').val()) > Number($('#input_quantity_scanned').attr('max'))){
             Swal.fire("Scanned quantity cannot larger than ordered quantity!");
+            document.getElementById("audio_wrong").play();
             $('#input_quantity_scanned').val(quantity_scanned_before);
             return;
         }
@@ -70,8 +76,11 @@ jQuery( document ).ready(function( $ ) {
             handle_selected_row.style.backgroundColor = 'lightskyblue';
         $('#quantity_modal').modal('hide');
     
-        if(check_scan_item_completed())
+        document.getElementById("audio_right").play();
+        if(check_scan_item_completed()){
+            document.getElementById("audio_complete").play();
             initialize_for_new_order();
+        }
 
     });
     $('#btn_reset').click(function(){
@@ -190,11 +199,15 @@ function get_data_from_bigcommerce(order_id, callback)        //get data from bi
             let temp = [response[i]['sku'], response[i]['upc'], response[i]['name'], response[i]['quantity'] + '/0'];
             rtn_data.push(temp);
         }
-        if (typeof callback == "function") 
+        if (typeof callback == "function") {
+            document.getElementById("audio_right").play();
             callback(rtn_data); 
+        }
     
       }).fail(function(xhr, status, error) {
-          console.log("Can not get data from Bigcommerce!");
+            document.getElementById("audio_wrong").play();
+//            console.log("Can not get data from Bigcommerce!");
+            Swal.fire("Can not get data from Bigcommerce!","Check your network connection or<br> input correct order ID!");
     });
 }
 
@@ -202,8 +215,10 @@ function show_item_data(find_item){
     // let obj = data.find(item => item[0] === find_item)
     // console.log("find result: ", obj);
     Search_item(find_item);
-    if(check_scan_item_completed())
+    if(check_scan_item_completed()){
+        document.getElementById("audio_complete").play();
         initialize_for_new_order();
+    }
     $('#input_scan').val("");
 }
 function initialize_for_new_order(){
@@ -223,6 +238,7 @@ function initialize_for_new_order(){
 function Search_item(searchValue) {
     var searchTable = document.getElementById('myTable'); 
     var searchColCount; //Column Counetr
+    var flag_found_item = false;
     //Loop through table rows
     for (var rowIndex = 0; rowIndex < searchTable.rows.length; rowIndex++) {
         var rowData = '';
@@ -233,7 +249,9 @@ function Search_item(searchValue) {
         }
         //Process data rows. (rowIndex >= 1)
         for (var colIndex = 0; colIndex < searchColCount; colIndex++) {
-            if(searchTable.rows.item(rowIndex).cells.item(colIndex).textContent == searchValue){
+//            if(searchTable.rows.item(rowIndex).cells.item(colIndex).textContent == searchValue){
+              if(searchTable.rows.item(rowIndex).cells.item(colIndex).textContent.toLowerCase() == searchValue.toLowerCase()){
+                    flag_found_item = true;
                 let temp_arr = searchTable.rows[rowIndex].cells[4].innerHTML.split('/');
                 if(Number(temp_arr[1]) < Number(temp_arr[0])){
                     temp_arr[1] =  (Number(temp_arr[1]) + 1).toString();
@@ -243,7 +261,12 @@ function Search_item(searchValue) {
                     else{
                         searchTable.rows.item(rowIndex).style.backgroundColor = 'lightskyblue';
                     }
+                    document.getElementById("audio_right").play();
+                } else{
+                    document.getElementById("audio_wrong").play();
+                    Swal.fire("This item is completed already!");            
                 }
+
                 searchTable.rows[rowIndex].cells[4].innerHTML = temp_arr[0] + '/' + temp_arr[1];   
             }
             //rowData += searchTable.rows.item(rowIndex).cells.item(colIndex).textContent;
@@ -273,6 +296,11 @@ function Search_item(searchValue) {
         // }
         /////////////////////////////////////////////////////////////////////////////////////////
     }
+    if(!flag_found_item){
+        document.getElementById("audio_wrong").play();
+        Swal.fire("Can not find item!");
+    }
+
 }
 
 function check_scan_item_completed(){
