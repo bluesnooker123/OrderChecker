@@ -208,6 +208,7 @@ function get_data_from_bigcommerce(order_id, callback)        //get data from bi
             document.getElementById("audio_wrong").play();
 //            console.log("Can not get data from Bigcommerce!");
             Swal.fire("Can not get data from Bigcommerce!","Check your network connection or<br> input correct order ID!");
+            $('#input_scan').val('');
     });
 }
 
@@ -263,7 +264,7 @@ function Search_item(searchValue) {
                     document.getElementById("audio_right").play();
                 } else{
                     document.getElementById("audio_wrong").play();
-                    Swal.fire("This item is completed already!");            
+                    Swal.fire(searchValue + " is completed already!");            
                 }
                 searchTable.rows[rowIndex].cells[4].innerHTML = temp_arr[0] + '/' + temp_arr[1];   
                 break;
@@ -297,7 +298,7 @@ function Search_item(searchValue) {
     }
     if(!flag_found_item){
         document.getElementById("audio_wrong").play();
-        Swal.fire("Can not find item!");
+        Swal.fire("Can not find item - " + searchValue);
     }
 
 }
