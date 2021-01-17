@@ -204,6 +204,7 @@ function show_item_data(find_item){
     Search_item(find_item);
     if(check_scan_item_completed())
         initialize_for_new_order();
+    $('#input_scan').val("");
 }
 function initialize_for_new_order(){
     let temp_arr = $('#div_Order_ID').text().split(':');
