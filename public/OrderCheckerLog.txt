@@ -1,0 +1,8 @@
+Empty Order Input => Please input order id! ::: Mon Jan 18 2021 09:59:50 GMT+0700 (GMT+07:00)
+Loading completed => Loading items for Order ID: 201433436 completed. ::: Mon Jan 18 2021 09:59:55 GMT+0700 (GMT+07:00)
+Loading completed => Loading items for Order ID: 201433436 completed. ::: Mon Jan 18 2021 10:00:40 GMT+0700 (GMT+07:00)
+Success => Scan item successed - 035926100466 ::: Mon Jan 18 2021 10:00:47 GMT+0700 (GMT+07:00)
+Success => Scan item successed - 035926100459 ::: Mon Jan 18 2021 10:00:49 GMT+0700 (GMT+07:00)
+Success => Scan item successed - 035926100473 ::: Mon Jan 18 2021 10:00:52 GMT+0700 (GMT+07:00)
+Scan item completed => Scan of order ID: 201433436 has been completed. ::: Mon Jan 18 2021 10:00:53 GMT+0700 (GMT+07:00)
+Loading completed => Loading items for Order ID: 201433435 completed. ::: Mon Jan 18 2021 10:00:57 GMT+0700 (GMT+07:00)

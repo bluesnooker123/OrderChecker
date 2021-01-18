@@ -25,8 +25,10 @@ jQuery( document ).ready(function( $ ) {
                     console.log("save log result: ",result);
                 });
         
-            } else
+            } else{
+                $('.loader').show();
                 show_order_data(order_id);
+            }
         }    
         else if($('#btn_scan').text() == "Scan item"){
             let find_item = $('#input_scan').val();
@@ -139,6 +141,7 @@ function show_order_data(order_id){
     //     con_div.insertBefore(newDiv, currentDiv);
     // }); 
     get_data_from_bigcommerce(order_id,function(res){   // Get data from Bigcommerce using API by order id
+        $('.loader').hide();
 
         let con_div = document.getElementById("div_con"); 
         let newDiv = document.createElement("div");
